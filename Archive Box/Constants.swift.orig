@@ -1,0 +1,52 @@
+//
+//  Constants.swift
+//  BuxBox
+//
+//  Created by SongChiduk on 12/28/18.
+//  Copyright © 2018 BuxBox. All rights reserved.
+//
+
+import Foundation
+
+struct Constants{
+    #if DEBUG
+    
+<<<<<<< HEAD
+    static let appServerHost = "http://10.3.4.94:49090"
+=======
+    static let appServerHost = "http://10.3.6.72:49090"
+>>>>>>> 0.1.2-chiman
+    
+    
+    #else
+    static let appServerHost = "http://10.3.2.231:49090"
+    #endif
+    
+}
+
+
+public let googleAPIKey = "AIzaSyClFG3dRjeHoqd4TM_H5T0ibLt0h3RuTlg"
+public let naverClientID = "cG8dzGYWuvb9ksvFkmXZ"
+public let naverSecret = "upseZV7M2i"
+public let googleVisionURL = URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(googleAPIKey)")!
+
+struct RestApi {
+    static let user = "/user"
+    static let login = Constants.appServerHost + RestApi.user + "/login"
+    static let register = Constants.appServerHost + RestApi.user + "/register"
+    static let facebookLogin = Constants.appServerHost + RestApi.user + "/facebookLogIn"
+    static let naverLogIn = Constants.appServerHost + RestApi.user + "/naverLogIn"
+    static let googleLogIn = Constants.appServerHost + RestApi.user + "/googleLogIn"
+
+    static let home = "/home"
+    static let searchBook = Constants.appServerHost + RestApi.home + "/searchBook"
+    static let addBook = Constants.appServerHost + RestApi.home + "/addBook"
+    static let getBooks = Constants.appServerHost + RestApi.home + "/getBooks"
+    static let getBook = Constants.appServerHost + RestApi.home + "/getBook"
+    
+    static let note = "/note"
+    static let addNoteImage = Constants.appServerHost + RestApi.note + "/addNoteImage"
+    static let addNote = Constants.appServerHost + RestApi.note + "/addNote"
+    static let getNote = Constants.appServerHost + RestApi.note + "/getNote"
+    
+}

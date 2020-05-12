@@ -1,0 +1,355 @@
+//
+//  HomeController.swift
+//  BuxBox
+//
+//  Created by SongChiduk on 12/29/18.
+//  Copyright © 2018 BuxBox. All rights reserved.
+//
+
+import Foundation
+import UIKit
+import ObjectMapper
+import SwiftyJSON
+
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+    
+    var books = [Book]()
+    var loadData = true
+    let searchBar = UISearchBar()
+    
+    let loadImageButton = UIButton()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "BuxBox"
+        navigationController?.navigationBar.tintColor = buxboxthemeColor
+        navigationController?.navigationBar.isTranslucent = false
+        setupSearchBar()
+        setupCollectionView()
+    }
+    
+    var subView : UIView?
+    func setupSearchBar() {
+        
+<<<<<<< HEAD
+        collectionView.register(BookCellView.self, forCellWithReuseIdentifier: "BookCellView")
+        collectionView.alwaysBounceVertical = true
+        
+        self.view.addSubview(loadImageButton)
+        
+        loadImageButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100).isActive = true
+        loadImageButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 100).isActive = true
+        loadImageButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        loadImageButton.setTitle("Load Image", for: .normal)
+        
+        loadImageButton.addTarget(self, action: #selector(loadImage(sender:)), for: .touchUpInside)
+=======
+        subView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 45))
+        subView?.backgroundColor = UIColor.white
+        view.addSubview(subView!)
+        subView?.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        subView?.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        subView?.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        subView?.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        subView?.translatesAutoresizingMaskIntoConstraints = false
+        
+        subView?.addSubview(searchBar)
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search"
+        searchBar.backgroundImage = UIImage()
+        searchBar.barTintColor = UIColor.white
+        
+        if let txfSearchField = searchBar.value(forKey: "_searchField") as? UITextField {
+            txfSearchField.borderStyle = .roundedRect
+            txfSearchField.backgroundColor = Color.hexStringToUIColor(hex: "#EFEFEF")
+        }
+//        searchBar.frame = CGRect(x: 0, y: 0, width: view.frame.width * (3/4), height: 40)
+//        searchBar.delegate = self
+//        searchBar.placeholder = "Search"
+//        view.addSubview(searchBar)
+//        searchBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        searchBar.widthAnchor.constraint(equalToConstant: view.frame.width * (3/4)).isActive = true
+//        searchBar.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//        searchBar.translatesAutoresizingMaskIntoConstraints = false
+>>>>>>> 0.1.2-chiman
+    }
+    
+    func getBooks(){
+        var params = [
+            "uniqueId": JoinUserInfo.getInstance.uniqueId,
+            "skip": 0.description
+        ]
+        
+        if self.books.count > 0 {
+            params["skip"] = (self.books.count - 1).description
+        }
+        
+        let strParams = params.stringFromHttpParameters()
+        
+        var request = URLRequest(url: URL(string: RestApi.getBooks + "?" + strParams)!)
+        request.httpMethod = "GET"
+        
+        URLSession(configuration: .default).dataTask(with: request){(data, response, error) in
+            self.loadData = true
+            
+            if data == nil{
+                return
+            }
+            
+            do{
+                let json = try JSONSerialization.jsonObject(with: data!, options: []) as! [[String:Any]]
+                let results = Mapper<Book>().mapArray(JSONArray: json)
+                
+                if results.count > 0 {
+                    self.books += results
+                    self.collectionView.reloadData()
+                }
+
+            }catch{
+                print(error)
+            }
+        }.resume()
+    }
+    
+<<<<<<< HEAD
+    @objc func loadImage(sender: UIButton){
+        let vc = ImageSelector()
+        vc.delegate = self
+        vc.modalPresentationStyle = .overFullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
+=======
+
+    var fakeData : [Book] = [
+        Book(image: "chimansong", title: "The Greatest Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "Learn how to create Billion dollar start up", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "ABC of AI programming", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "The Greatest Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "Learn how to create Billion dollar start up", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "ABC of AI programming", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "The Greatest Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "Learn how to create Billion dollar start up", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "ABC of AI programming", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "The Greatest Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "Success story of Chi Man Song", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "chimansong", title: "Learn how to create Billion dollar start up", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil),
+        Book(image: "stevejobs", title: "ABC of AI programming", author: "Chi man Song", genre: "", datePurchased: "", readingPeriod: "", numberOfRead: nil, rate: nil)
+    ]
+>>>>>>> 0.1.2-chiman
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+        if scrollView.contentOffset.x >= scrollView.contentSize.width - scrollView.frame.size.width{
+            
+            if loadData{
+                loadData = false
+                getBooks()
+            }
+            
+        }
+    }
+    
+    func setupCollectionView() {
+        
+        collectionView.register(BookCellView.self, forCellWithReuseIdentifier: "BookCellView")
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = UIColor.white
+        
+        view.addSubview(collectionView)
+        collectionView.topAnchor.constraint(equalTo: (subView?.bottomAnchor)!).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return fakeData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = BookCellView()
+        let data = fakeData[indexPath.item]
+        let width = view.frame.size.width - (marginBase*4)
+        let containerWidth = width - (marginBase*3) - cell.coverImageWidth
+        let titleHeight = Text.textHeightForView(text: data.title!, font: cell.titleLabelFont!, width: containerWidth)
+        let authorNameHeight = Text.textHeightForView(text: data.author!, font: cell.authorLabelFont!, width: containerWidth)
+        let totalContainerHeight = titleHeight + authorNameHeight
+        let imageHeight = cell.coverImageWidth
+        
+        var totalHeight : CGFloat?
+        if imageHeight > totalContainerHeight {
+            totalHeight = imageHeight + (marginBase*2)
+        } else {
+            totalHeight = totalContainerHeight + (marginBase*2)
+        }
+        
+        return CGSize(width: width, height: totalHeight!)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let data = fakeData[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BookCellView", for: indexPath) as! BookCellView
+        cell.bookTitle = data.title
+        cell.authorName = data.author
+        cell.bookImage = data.coverImage
+        
+        return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let view = BookNoteController(collectionViewLayout: UICollectionViewFlowLayout())
+        view.bookId = "1234"
+        navigationController?.pushViewController(view, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        let gap : CGFloat = marginBase*2
+        return gap
+    }
+    
+    func resizeImage(_ imageSize: CGSize, image: UIImage) -> Data {
+        UIGraphicsBeginImageContext(imageSize)
+        image.draw(in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        let resizedImage = newImage!.pngData()
+        UIGraphicsEndImageContext()
+        return resizedImage!
+    }
+    
+    func analyzeResults(_ data: Data) {
+        
+        // Update UI on the main thread
+        DispatchQueue.main.async(execute: {
+           
+            
+            do{
+                 let json = try JSON(data: data)
+                
+                print(json)
+//                let errorObj = json["error"]
+//                let responses = json["responses"][0]
+//                let textAnnotations = responses["textAnnotations"]
+//                let numTexts = textAnnotations.count
+                var texts : Array<String> = []
+                
+//                if numTexts > 0 {
+//                    var textResultText: String = "Text found: "
+//                    for index in 0..<numTexts {
+//                        let text = textAnnotations[index]["description"].stringValue
+//                        texts.append(text)
+//                    }
+//                    
+//                    for text in texts {
+//                        if texts[texts.count - 1] != text{
+//                            textResultText += "\(text), "
+//                        }else{
+//                            textResultText += "\(text)"
+//                        }
+//                    }
+//                }
+            }catch{
+                print(error)
+            }
+            
+            
+            
+        })
+        
+    }
+    
+    func base64EncodeImage(_ image: UIImage) -> String {
+        var imagedata = image.pngData()
+        
+        // Resize the image if it exceeds the 2MB API limit
+        if ((imagedata?.count)! > 2097152) {
+            let oldSize: CGSize = image.size
+            let newSize: CGSize = CGSize(width: 800, height: oldSize.height / oldSize.width * 800)
+            imagedata = resizeImage(newSize, image: image)
+        }
+        
+        return imagedata!.base64EncodedString(options: .endLineWithCarriageReturn)
+    }
+    
+    func createRequest(with imageBase64: String) {
+        // Create our request URL
+        
+        var request = URLRequest(url: googleVisionURL)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue(Bundle.main.bundleIdentifier ?? "", forHTTPHeaderField: "X-Ios-Bundle-Identifier")
+        
+        // Build our API request
+        let jsonRequest = [
+            "requests": [
+                "image": [
+                    "content": imageBase64
+                ],
+                "features": [
+                    
+                    [
+                        "type": "TEXT_DETECTION",
+                        "maxResults": 10
+                    ]
+                ]
+            ]
+        ]
+        let jsonObject = JSON(jsonRequest)
+        
+        // Serialize the JSON
+        guard let data = try? jsonObject.rawData() else {
+            return
+        }
+        
+        request.httpBody = data
+        
+        // Run the request on a background thread
+        DispatchQueue.global().async { self.runRequestOnBackgroundThread(request) }
+    }
+    
+    func runRequestOnBackgroundThread(_ request: URLRequest) {
+        // run the request
+        
+        let task: URLSessionDataTask = URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
+            }
+            
+            self.analyzeResults(data)
+        }
+        
+        task.resume()
+    }
+}
+
+extension HomeController: ImageSelectorDelegate {
+    func insertToArray(_ controller: ImageSelector, sender: [SelectPhotoModel]) {
+        
+    }
+    
+    func cancel(_ controller: ImageSelector) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func select(controller: ImageSelector, sender: [SelectPhotoModel]) {
+        var selImages = [UIImage]()
+        for i in 0..<sender.count {
+            let image = sender[i].finalPhoto!.resizeWithPercent(percentage: 0.7)
+            if let newImage = image {
+                selImages.append(newImage)
+            }
+        }
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        let encodedImage = base64EncodeImage(selImages[0])
+        createRequest(with: encodedImage)
+    }
+}
